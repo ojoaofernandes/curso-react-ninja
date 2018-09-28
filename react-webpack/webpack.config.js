@@ -30,6 +30,7 @@ module.exports = {
         loader: "eslint-loader",
         options: {
           "extends": "airbnb",
+          emitWarning: true,
           "rules": {
             "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
           }
@@ -41,8 +42,13 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-            plugins: ['react-hot-loader/babel']
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react'
+            ],
+            plugins: [
+              'react-hot-loader/babel'
+            ]
           }
         }
       }
