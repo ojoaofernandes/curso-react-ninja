@@ -1,10 +1,8 @@
 import React from 'react';
-import Title from './Title';
+import CounterContainer from './containers/CounterContainer';
 
-class App extends React.Component {
-  render() {
-    return <Title />;
-  }
+function App() {
+  return <CounterContainer />;
 }
 
 export default App;
