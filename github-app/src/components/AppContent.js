@@ -6,11 +6,16 @@ import Actions from './Actions';
 import Repos from './Repos';
 
 function AppContent({
-  user, repos, starred, handleSearch, getRepos, getStarred,
+  user, repos, starred, isFetching, handleSearch, getRepos, getStarred,
 }) {
   return (
     <div className="app">
-      <Search handleSearch={handleSearch} />
+      <Search
+        isDisabled={isFetching}
+        handleSearch={handleSearch}
+      />
+
+      {isFetching && <div>Carregando...</div>}
 
       {!!user && <UserInfo user={user} />}
 
@@ -48,6 +53,7 @@ AppContent.propTypes = {
   user: PropTypes.object,
   repos: PropTypes.array.isRequired,
   starred: PropTypes.array.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   handleSearch: PropTypes.func.isRequired,
   getRepos: PropTypes.func.isRequired,
   getStarred: PropTypes.func.isRequired,

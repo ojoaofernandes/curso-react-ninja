@@ -9,11 +9,11 @@ class App extends Component {
   constructor() {
     super();
     this.handleSearch = this.handleSearch.bind(this);
-    this.getRepos = this.getRepos.bind(this);
     this.state = {
       user: null,
       repos: [],
       starred: [],
+      isFetching: false,
     };
   }
 
@@ -21,16 +21,15 @@ class App extends Component {
     return () => {
       const { user: { login } } = this.state;
 
-      axios
-        .get(`https://api.github.com/users/${login}/${type}?access_token=${OAUTH_TOKEN}`)
+      axios.get(`https://api.github.com/users/${login}/${type}?access_token=${OAUTH_TOKEN}`)
         .then((res) => {
-          this.setState(() => ({
+          this.setState({
             [type]: res.data.map(repo => ({
               id: repo.id,
               name: repo.name,
               link: repo.html_url,
             })),
-          }));
+          });
         });
     };
   }
@@ -40,10 +39,11 @@ class App extends Component {
     const { keyCode } = event;
 
     if (keyCode === ENTER_KEY) {
-      axios
-        .get(`https://api.github.com/users/${value}?access_token=${OAUTH_TOKEN}`)
+      this.setState({ isFetching: true });
+
+      axios.get(`https://api.github.com/users/${value}?access_token=${OAUTH_TOKEN}`)
         .then((res) => {
-          this.setState(() => ({
+          this.setState({
             user: {
               login: res.data.login,
               name: res.data.name,
@@ -54,19 +54,19 @@ class App extends Component {
             },
             repos: [],
             starred: [],
-          }));
+          });
+        })
+        .catch()
+        .then(() => {
+          this.setState({ isFetching: false });
         });
     }
   }
 
   render() {
-    const { user, repos, starred } = this.state;
-
     return (
       <AppContent
-        user={user}
-        repos={repos}
-        starred={starred}
+        {...this.state}
         handleSearch={this.handleSearch}
         getRepos={this.getRepos('repos')}
         getStarred={this.getRepos('starred')}
