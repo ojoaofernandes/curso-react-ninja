@@ -1,12 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function Actions() {
+function Actions({ getRepos, getStarred }) {
   return (
     <div className="actions">
-      <button type="button">Ver repositórios</button>
-      <button type="button">Ver favoritos</button>
+      <button type="button" onClick={getRepos}>Ver repositórios</button>
+      <button type="button" onClick={getStarred}>Ver favoritos</button>
     </div>
   );
 }
+
+Actions.propTypes = {
+  getRepos: PropTypes.func.isRequired,
+  getStarred: PropTypes.func.isRequired,
+};
 
 export default Actions;

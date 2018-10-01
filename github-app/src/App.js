@@ -9,10 +9,29 @@ class App extends Component {
   constructor() {
     super();
     this.handleSearch = this.handleSearch.bind(this);
+    this.getRepos = this.getRepos.bind(this);
     this.state = {
       user: null,
       repos: [],
-      stars: [],
+      starred: [],
+    };
+  }
+
+  getRepos(type) {
+    return () => {
+      const { user: { login } } = this.state;
+
+      axios
+        .get(`https://api.github.com/users/${login}/${type}?access_token=${OAUTH_TOKEN}`)
+        .then((res) => {
+          this.setState(() => ({
+            [type]: res.data.map(repo => ({
+              id: repo.id,
+              name: repo.name,
+              link: repo.html_url,
+            })),
+          }));
+        });
     };
   }
 
@@ -33,20 +52,24 @@ class App extends Component {
               following: res.data.following,
               followers: res.data.followers,
             },
+            repos: [],
+            starred: [],
           }));
         });
     }
   }
 
   render() {
-    const { user, repos, stars } = this.state;
+    const { user, repos, starred } = this.state;
 
     return (
       <AppContent
         user={user}
         repos={repos}
-        stars={stars}
+        starred={starred}
         handleSearch={this.handleSearch}
+        getRepos={this.getRepos('repos')}
+        getStarred={this.getRepos('starred')}
       />
     );
   }

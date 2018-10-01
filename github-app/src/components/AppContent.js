@@ -6,13 +6,21 @@ import Actions from './Actions';
 import Repos from './Repos';
 
 function AppContent({
-  user, repos, stars, handleSearch,
+  user, repos, starred, handleSearch, getRepos, getStarred,
 }) {
   return (
     <div className="app">
       <Search handleSearch={handleSearch} />
+
       {!!user && <UserInfo user={user} />}
-      {!!user && <Actions />}
+
+      {!!user && (
+        <Actions
+          getRepos={getRepos}
+          getStarred={getStarred}
+        />
+      )}
+
       {!!repos.length && (
         <Repos
           className="repos"
@@ -20,11 +28,12 @@ function AppContent({
           repos={repos}
         />
       )}
-      {!!stars.length && (
+
+      {!!starred.length && (
         <Repos
-          className="stars"
+          className="starred"
           title="Favoritos"
-          repos={stars}
+          repos={starred}
         />
       )}
     </div>
@@ -38,8 +47,10 @@ AppContent.defaultProps = {
 AppContent.propTypes = {
   user: PropTypes.object,
   repos: PropTypes.array.isRequired,
-  stars: PropTypes.array.isRequired,
+  starred: PropTypes.array.isRequired,
   handleSearch: PropTypes.func.isRequired,
+  getRepos: PropTypes.func.isRequired,
+  getStarred: PropTypes.func.isRequired,
 };
 
 export default AppContent;
