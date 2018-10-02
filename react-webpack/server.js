@@ -6,6 +6,7 @@ const compiler = webpack(config);
 const options = {
   publicPath: config.output.publicPath,
   hot: true,
+  overlay: true,
   historyApiFallback: true,
   stats: {
     colors: true
